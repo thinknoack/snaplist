@@ -6,14 +6,15 @@ __Install the dependencies:__
 __Test:__
 
 `npm test`
+__When you are done, create a production ready version of the JS bundle:__
+
+`npm run build`
 
 __Development mode with livereload:__
 
 `npm run watch` or just `npm start`
 
-__When you are done, create a production ready version of the JS bundle:__
 
-`npm run build`
 
 __Deploy on Github pages with one command:__
 
