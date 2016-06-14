@@ -1,0 +1,10 @@
+export default {
+
+    /**
+    * Kegbot
+    */
+    kegbot: {
+        //url: 'http://sippr.office.sqm.io/v1/api'
+    }
+
+};
