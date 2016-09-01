@@ -1,7 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { version } from '../../package.json';
+<<<<<<< HEAD
 import api from '../scripts/utils/api';
+=======
+import kegbot from '../scripts/utils/kegbot';
+>>>>>>> da5d2f8c23a5e8e0008b860abf2e94e7de21748a
 
 let App = React.createClass({
 
@@ -69,6 +73,7 @@ let App = React.createClass({
             this.setState({newSnap: ''});
         });
     }
+
 });
 
 
