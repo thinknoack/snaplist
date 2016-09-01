@@ -20,6 +20,40 @@ var Request = {
                 });
         });
     },
+    post (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.post(url)
+                .set(options.headers)
+                .query(options.query)
+                .send(options.body)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
+
+    put (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.put(url)
+                .set(options.headers)
+                .query(options.query)
+                .send(options.body)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
+
+    del (url, callback) {
+        handleRequest(url, {}, function (url, options) {
+            request.del(url)
+                .set(options.headers)
+                .query(options.query)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
 
 };
 
