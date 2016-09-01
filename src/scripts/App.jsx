@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { version } from '../../package.json';
+import Filter from 'bad-words';
 import api from '../scripts/utils/api';
+
+let filter = new Filter();
 
 let App = React.createClass({
 
@@ -45,10 +48,10 @@ let App = React.createClass({
         let snapsList = snaps.map((snaps) => {
             let snap = snaps.snap;
             return (
-                <li key={snaps._id}>{snap}</li>
+                <li className="flipInX" key={snaps._id}>{snap}</li>
             );
         });
-
+        snapsList.reverse();
         return snapsList;
     },
 
@@ -63,7 +66,7 @@ let App = React.createClass({
     },
     addSnap(e){
         e.preventDefault();
-        let newSnap = {snap: this.state.newSnap}
+        let newSnap = {snap: filter.clean(this.state.newSnap)}
         api.addSnap(newSnap, (err, res) =>{
             this.getSnaps();
             this.setState({newSnap: ''});

@@ -1,5 +1,3 @@
-
-
 $bg-color: #1e242e;
 $kegpercent-bg-color:$bg-color;
 
@@ -15,11 +13,16 @@ body {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #333;
+    font-family: 'Khula', Helvetica, sans-serif;
+    color: #eee;
     background: $bg-color;
     margin: 0;
     padding: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Bungee Hairline', sans-serif;
+    font-weight: 400;
 }
 
 #content {
@@ -48,188 +51,12 @@ body {
     display: block;
 }
 
-@keyframes load {
-    0% { stroke-dashoffset:0}
-}
-
-@keyframes pour {
-    0% { bottom:-100%}
-    100% { bottom:0%}
-}
-
-@keyframes pour-info {
-    0% { top:7rem;}
-    20% { top:7rem;}
-    100% { top:1.5rem;}
-}
-
-
-ul.kegs-list {
-    position: relative;
-    display: block;
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    list-style: none;
-}
-
-li.keg {
-    display: inline-flex;
-    position: relative;
-    text-align: center;
-    color: #93A2AC;
-    font-family: Lato;
-    font-weight:100;
-    margin: 2rem;
-    width: 20rem;
-    height: 20rem;
-    border-radius: 50%;
+.kegs-list{
+    height: 500px;
     overflow: hidden;
-
-    .progress {
-        position: relative;
-        display: block;
-        padding: 0;
-        text-align: center;
-        opacity: 1;
-        transition: opacity 1s;
-
-        &>li {
-            list-style: none;
-        }
-
-        svg {
-            width: 20rem;
-            height: 20rem;
-
-            &:nth-child(2) {
-                position: absolute;
-                left: 0;
-                top: 0;
-                transform: rotate(-90deg);
-
-                path {
-                    fill: none;
-                    stroke-width: 9.7;
-                    stroke-dasharray: 630;
-                    stroke: $kegpercent-bg-color;
-                    animation: load 6s;
-                    opacity: .93;
-                }
-            }
-
-            &.invert-circle-clip {
-                margin:0 auto;
-                path {
-                    transition:fill .5s;
-                    fill:rgba(0,0,0,.3);
-                }
-            }
-        }
-    }
-
-
-
-
-
-    .keg-info {
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 7rem;
-        margin: 0 auto;
-        width: 100%;
-        font-weight:400;
-        z-index: 3001;
-        transition: top 8s;
-
-        img {
-            width: 135px;
-            height: auto;
-            margin: 10px auto;
-            display: block;
-        }
-        .percent-full {
-            font-weight: 100;
-            width: 100%;
-            font-size: 2rem;
-            text-align: center;
-        }
-        .tap-number {
-            margin: 10px  auto 0;
-            display: block;
-            width: 100px;
-            height: 100px;
-            background: rgba(0, 0, 0, 0);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            text-align: center;
-            color: #b54158;
-            font-family: Lato;
-            z-index: 3000;
-        }
-    }
-
-    .pouring-display {
-        display: block;
-        background: transparent url('../images/pour.gif') no-repeat 0 0;
-        position: absolute;
-        bottom: -100%;
-        left: 0;
-        z-index: 3000;
-        width: 320px;
-        height: 320px;
-        border-radius: 0;
-        font-size: 37px;
-        font-weight: 400;
-        text-transform: uppercase;
-        padding-top: 3rem;
-        color: #b96d6d;
-        opacity:1;
-        transition: opacity 5s;
-
-    }
+    overflow-y: scroll;
 }
 
-li.keg#keg1 {
-
-    &.unpour {
-        border-radius: 50%;
-        overflow: hidden;
-       .pouring-display {
-            bottom: 0;
-            opacity:0;
-            transition: opacity 3s;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-        .progress {
-            opacity: 1;
-            transition: opacity 10s;
-        }
-        .keg-info {
-            top: 7rem;
-            animation: pour-info 5s;
-        }
-    }
-    &.pouring {
-        border-radius: 50%;
-        overflow: hidden;
-
-        .pouring-display {
-            animation: pour 10s;
-            bottom: 0;
-            opacity:1;
-        }
-        .progress {
-            opacity: 0;
-            transition: opacity 0.6s;
-        }
-        .keg-info {
-            top: 1.5rem;
-            animation: pour-info 5s;
-        }
-    }
+.flipInX {
+  @include flipInX();
 }
-

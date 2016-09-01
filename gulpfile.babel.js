@@ -28,7 +28,7 @@ import ghPages from 'gulp-gh-pages';
 const paths = {
   bundle: 'app.js',
   entry: 'src/Index.js',
-  srcCss: 'src/**/*.scss',
+  srcCss: 'src/styles/**/*.scss',
   srcImg: 'src/images/**',
   srcLint: ['src/**/*.js', 'test/**/*.js'],
   dist: 'snapstuff',
