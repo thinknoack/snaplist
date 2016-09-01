@@ -22,7 +22,7 @@ let App = React.createClass({
         return (
             <div>
                 <h1 className="heading">Sippr</h1>
-                <img className="logo" src="../dist/images/sippr-logo.png" />
+                <img className="logo" src="../images/sippr-logo.png" />
                 <form onSubmit={this.addSnap}>
                     <input
                       type="text"
