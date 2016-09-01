@@ -20,7 +20,6 @@ var Request = {
                 });
         });
     },
-<<<<<<< HEAD
     post (url, options, callback) {
         handleRequest(url, options, function (url, options) {
             request.post(url)
@@ -55,8 +54,6 @@ var Request = {
                 });
         });
     },
-=======
->>>>>>> da5d2f8c23a5e8e0008b860abf2e94e7de21748a
 
 };
 
