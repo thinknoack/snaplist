@@ -31,10 +31,10 @@ const paths = {
   srcCss: 'src/**/*.scss',
   srcImg: 'src/images/**',
   srcLint: ['src/**/*.js', 'test/**/*.js'],
-  dist: 'dist',
-  distJs: 'dist/js',
-  distImg: 'dist/images',
-  distDeploy: './dist/**/*'
+  dist: 'snapstuff',
+  distJs: 'snapstuff/js',
+  distImg: 'snapstuff/images',
+  distDeploy: './snapstuff/**/*'
 };
 
 const customOpts = {
@@ -47,7 +47,7 @@ const customOpts = {
 const opts = Object.assign({}, watchify.args, customOpts);
 
 gulp.task('clean', cb => {
-  rimraf('dist', cb);
+  rimraf('snapstuff', cb);
 });
 
 gulp.task('browserSync', () => {
