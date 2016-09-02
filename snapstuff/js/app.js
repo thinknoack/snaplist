@@ -27440,6 +27440,7 @@ var App = _react2.default.createClass({
             contacts: [],
             snaps: [],
             newSnap: '',
+            newSnapClass: '',
             blacklisted: false
         };
     },
@@ -27449,7 +27450,7 @@ var App = _react2.default.createClass({
     render: function render() {
         return _react2.default.createElement(
             'div',
-            null,
+            { className: 'container' },
             _react2.default.createElement(
                 'h1',
                 { className: 'heading' },
@@ -27467,12 +27468,7 @@ var App = _react2.default.createClass({
                 }),
                 _react2.default.createElement('input', { type: 'submit', value: 'Post' })
             ),
-            _react2.default.createElement(
-                'h1',
-                null,
-                this.state.blacklisted ? 'this snap contains innapropriate content' : null
-            ),
-            _react2.default.createElement(
+            this.state.snaps.length == 0 ? 'loading' : _react2.default.createElement(
                 'ul',
                 { className: 'kegs-list' },
                 this._listSnaps(this.state.snaps)
@@ -27484,11 +27480,14 @@ var App = _react2.default.createClass({
     // template methods ---------------------------------------------------
 
     _listSnaps: function _listSnaps(snaps) {
+        var _this = this;
+
         var snapsList = snaps.map(function (snaps) {
             var snap = snaps.snap;
+            var newSnapClass = _this.props.newSnapClass;
             return _react2.default.createElement(
                 'li',
-                { className: 'flipInX', key: snaps._id },
+                { className: 'flipInX animated', key: snaps._id },
                 snap
             );
         });
@@ -27496,23 +27495,23 @@ var App = _react2.default.createClass({
         return snapsList;
     },
     getSnaps: function getSnaps() {
-        var _this = this;
+        var _this2 = this;
 
         _api2.default.getSnaps(function (err, res) {
-            _this.setState({ snaps: res.body });
+            _this2.setState({ snaps: res.body });
         });
     },
     handleSnapChange: function handleSnapChange(e) {
         this.setState({ newSnap: e.target.value });
     },
     addSnap: function addSnap(e) {
-        var _this2 = this;
+        var _this3 = this;
 
         e.preventDefault();
         var newSnap = { snap: filter.clean(this.state.newSnap) };
         _api2.default.addSnap(newSnap, function (err, res) {
-            _this2.getSnaps();
-            _this2.setState({ newSnap: '' });
+            _this3.getSnaps();
+            _this3.setState({ newSnap: '' });
         });
     }
 });

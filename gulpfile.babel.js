@@ -29,9 +29,12 @@ const paths = {
   bundle: 'app.js',
   entry: 'src/Index.js',
   srcCss: 'src/styles/**/*.scss',
+  srcCssUtil: 'src/styles/util/*.css',
   srcImg: 'src/images/**',
   srcLint: ['src/**/*.js', 'test/**/*.js'],
-  dist: 'snapstuff',
+  dist: 'snapstuff/',
+  distCSS: 'snapstuff/styles',
+  distUtil: 'snapstuff/styles/util',
   distJs: 'snapstuff/js',
   distImg: 'snapstuff/images',
   distDeploy: './snapstuff/**/*'
@@ -95,9 +98,19 @@ gulp.task('styles', () => {
   .pipe(sourcemaps.init())
   .pipe(postcss([postcssfor, vars, extend, nested, autoprefixer, cssnano, postcalc ]))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(paths.dist))
+  .pipe(gulp.dest(paths.distCSS))
   .pipe(reload({ stream: true }));
 });
+
+gulp.task('cssUtil', () => {
+  gulp.src(paths.srcCssUtil)
+  .pipe(rename({ extname: '.css' }))
+  .pipe(sourcemaps.init())
+  .pipe(sourcemaps.write('.'))
+  .pipe(gulp.dest(paths.distUtil))
+  .pipe(reload({ stream: true }));
+});
+
 
 gulp.task('htmlReplace', () => {
   gulp.src('index.html')
@@ -132,10 +145,10 @@ gulp.task('deploy', () => {
 });
 
 gulp.task('watch', cb => {
-  runSequence('clean', ['browserSync', 'watchTask', 'watchify', 'styles', 'lint', 'images'], cb);
+  runSequence('clean', ['browserSync', 'watchTask', 'watchify', 'cssUtil', 'styles', 'lint', 'images'], cb);
 });
 
 gulp.task('build', cb => {
   process.env.NODE_ENV = 'production';
-  runSequence('clean', ['browserify', 'styles', 'htmlReplace', 'images'], cb);
+  runSequence('clean', ['browserify', 'styles', 'cssUtil', 'htmlReplace', 'images'], cb);
 });

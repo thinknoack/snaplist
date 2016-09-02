@@ -13,6 +13,7 @@ let App = React.createClass({
             contacts: [],
             snaps: [],
             newSnap: '',
+            newSnapClass: '',
             blacklisted: false
         };
     },
@@ -23,7 +24,7 @@ let App = React.createClass({
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <h1 className="heading">Sippr</h1>
                 <img className="logo" src="/snapstuff/images/sippr-logo.png" />
                 <form onSubmit={this.addSnap}>
@@ -35,8 +36,7 @@ let App = React.createClass({
                     />
                     <input type="submit" value="Post" />
                 </form>
-                <h1>{this.state.blacklisted ? 'this snap contains innapropriate content' : null}</h1>
-                <ul className="kegs-list">{this._listSnaps(this.state.snaps)}</ul>
+                {this.state.snaps.length == 0 ? 'loading' :<ul className="kegs-list">{this._listSnaps(this.state.snaps)}</ul>}
             </div>
         );
     },
@@ -47,8 +47,9 @@ let App = React.createClass({
     _listSnaps(snaps) {
         let snapsList = snaps.map((snaps) => {
             let snap = snaps.snap;
+            let newSnapClass = this.props.newSnapClass;
             return (
-                <li className="flipInX" key={snaps._id}>{snap}</li>
+                <li className="flipInX animated" key={snaps._id}>{snap}</li>
             );
         });
         snapsList.reverse();
