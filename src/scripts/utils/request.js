@@ -44,7 +44,7 @@ var Request = {
         });
     },
 
-    del (url, callback) {
+    del (url, options, callback) {
         handleRequest(url, {}, function (url, options) {
             request.del(url)
                 .set(options.headers)

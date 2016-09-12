@@ -1,6 +1,5 @@
-$bg-color: #1e242e;
+$bg-color: #d0dcce;
 $kegpercent-bg-color:$bg-color;
-
 
 
 *, *:before, *:after {
@@ -14,10 +13,12 @@ body {
 
 body {
     font-family: 'Khula', Helvetica, sans-serif;
-    color: #eee;
-    background: $bg-color;
+    color: #556773;
     margin: 0;
     padding: 0;
+    background-color: $bg-color;
+    background: #d0dcce url('../images/bg1.jpg') 50% top fixed repeat-x;
+
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -27,25 +28,23 @@ h1,h2,h3,h4,h5,h6 {
 
 #content {
     height: 100%;
-    margin: 0;
-    padding: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
 }
-.container{
+
+.container {
     width: 100%;
-    padding:10px;
+    padding: 10px;
+    height: 100%;
+}
+.snap-wrap{
+    height: 100%;
 }
 
 .heading {
-    margin: 0;
-    position: absolute;
-    text-indent: -9999em;
-    left: -99999em;
-    height: 1px;
-    width: 1px;
-    overflow: hidden;
+    width: 95%;
+    margin: 0 auto;
+    padding: 20px 10px 0;
+    font-weight: 600;
 }
 
 .logo {
@@ -55,19 +54,127 @@ h1,h2,h3,h4,h5,h6 {
     display: block;
 }
 
-.kegs-list{
+.snaps-list {
     list-style: none;
-    height: 500px;
+    padding:10px;
+    margin: 0 auto;
+    width: 95%;
+    background:rgba(0,0,0, .1);
+    height: 90%;
     overflow: hidden;
     overflow-y: scroll;
-    padding:0;
-    margin: 0 auto;
-    width: 80%;
-    li{
+    li {
         text-align: center;
-        background:rgba(0,0,0,.05);
         padding:5px;
-        margin: 0 0 3px 0;
+        margin: 0 0 3px;
+        border-bottom: 2px solid rgba(0,0,0,.1);
     }
+}
+
+form{
+    width: 95%;
+    padding: 0;
+    margin: 10px auto;
+}
+.add-snap{
+    font-size: 20px;
+    line-height: 20px;
+    background: rgba(0,0,0,.1);
+    border: none;
+    padding: 10px;
+    width: 75%;
+    color: #d0dcce;
+}
+.btn-submit{
+    width: 25%;
+    text-align: left;
+    font-size: 20px;
+    padding: 16px;
+    border: none;
+    line-height: 20px;
+    background: transparent;
+    color: #556773;
+    cursor: pointer;
+
+}
+
+/* blur the same background as the body */
+.frosted::before {
+    margin: 0;
+    content: '';
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    width: 100%;
+    height: auto;
+    background: -moz-linear-gradient(top,  rgba(208,220,206,0) 0%,  #d0dcce 100%);
+    background: -webkit-linear-gradient(top,  rgba(208,220,206, 0) 0%, #d0dcce 100%);
+    background: linear-gradient(to bottom,  rgba(208,220,206, 0) 0%, #d0dcce 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='transparent', endColorstr='#d0dcce',GradientType=0 );
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);
+    -o-filter: blur(10px);
+    filter:blur(10px);
+    z-index: -2;
+    position: fixed;
+    height: 70px;
+}
+
+/* add a tint layer to brighten (or darken) */
+.frosted::after {
+    position: fixed;
+    content: '';
+    left: 0;
+    width: 100%;
+    height: 150px;
+    bottom: 0px;
+    background: -moz-linear-gradient(top,  rgba(208,220,206, 0) 0%,  #d0dcce 100%);
+    background: -webkit-linear-gradient(top,  rgba(208,220,206, 0) 0%, #d0dcce 100%);
+    background: linear-gradient(to bottom,  rgba(208,220,206, 0) 0%, #d0dcce 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='transparent', endColorstr='#d0dcce',GradientType=0 );
+    z-index: -1;
+}
+
+/* The content */
+.frosted {
+    font-family: Avenir Next, Avenir, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 32px;
+    color: #fff;
+    position: fixed;
+    margin: 0;
+    padding-left: 16px;
+    width: 100%;
+    height: 100px;
+    //border: 1px solid rgba(255,255,255,0.25);
+    bottom:0;
+}
+
+.loader {
+    color: #556773;
+    font-family: Consolas, Menlo, Monaco, monospace;
+    font-weight: bold;
+    font-size: 40px;
+    opacity: 0.8;
+    width: 100%;
+    text-align: center;
+    margin: 50px auto;
+
+    span {
+        display: inline-block;
+        animation: pulse 0.4s alternate infinite ease-in-out;
+
+        &:nth-child(odd) {
+            animation-delay: 0.4s;
+        }
+    }
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
 }
 
