@@ -27439,8 +27439,8 @@ var App = _react2.default.createClass({
         return {
             contacts: [],
             snaps: [],
-            newSnap: '',
-            blacklisted: false
+            loadingText: 'Loading Snaps',
+            newSnap: ''
         };
     },
     componentWillMount: function componentWillMount() {
@@ -27456,7 +27456,9 @@ var App = _react2.default.createClass({
                 null,
                 '{'
             ),
-            ' LOADING ',
+            ' ',
+            this.state.loadingText,
+            ' ',
             _react2.default.createElement(
                 'span',
                 null,
@@ -27513,30 +27515,41 @@ var App = _react2.default.createClass({
             var snap_id = snaps._id;
             return _react2.default.createElement(
                 'li',
-                { className: 'fadeInDown animated', key: snap_id },
-                snap,
+                { className: 'bounceInDown animated', key: snap_id },
                 _react2.default.createElement(
                     'span',
-                    { onClick: _this.removeSnap.bind(_this, snap_id) },
-                    'xx'
+                    { className: 'snap-item' },
+                    snap
+                ),
+                _react2.default.createElement(
+                    'span',
+                    { className: 'delete-snap' },
+                    _react2.default.createElement(
+                        'span',
+                        { onClick: _this.removeSnap.bind(_this, snap_id) },
+                        'x'
+                    )
                 )
             );
         }, this);
         snapsList.reverse();
         return snapsList;
     },
+
+
+    // request methods
     getSnaps: function getSnaps() {
         var _this2 = this;
 
         _api2.default.getSnaps(function (err, res) {
             var i = 0;
-            var newRes = [];
-            while (i < 50) {
-                var snapPop = res.body.pop();
-                newRes.unshift(snapPop);
-                i++;
+            var newRes = void 0;
+            if (res.body.length > 50) {
+                newRes = res.body.slice(0, 50);
+            } else {
+                newRes = res.body;
             }
-            _this2.setState({ snaps: newRes });
+            _this2.setState({ snaps: newRes, loadingText: 'Add Snaps Yo!' });
         });
     },
     handleSnapChange: function handleSnapChange(e) {

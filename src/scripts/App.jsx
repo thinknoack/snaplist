@@ -12,8 +12,8 @@ let App = React.createClass({
         return {
             contacts: [],
             snaps: [],
+            loadingText: 'Loading Snaps',
             newSnap: '',
-            blacklisted: false
         };
     },
 
@@ -25,7 +25,7 @@ let App = React.createClass({
 
         let loadingGif = (
             <div className="loader">
-                <span>{'{'}</span> LOADING <span>{'}'}</span>
+                <span>{'{'}</span> {this.state.loadingText} <span>{'}'}</span>
             </div>
         );
 
@@ -63,29 +63,32 @@ let App = React.createClass({
             let snap = snaps.snap;
             let snap_id = snaps._id;
             return (
-                <li className="fadeInDown animated" key={snap_id}>{snap}<span onClick={this.removeSnap.bind(this, snap_id)}>xx</span></li>
+                <li className="bounceInDown animated" key={snap_id}><span className="snap-item">{snap}</span><span className="delete-snap"><span onClick={this.removeSnap.bind(this, snap_id)}>x</span></span></li>
             );
         }, this);
         snapsList.reverse();
         return snapsList;
     },
 
+
+// request methods
     getSnaps() {
         api.getSnaps((err, res) => {
             let i = 0;
-            let newRes = [];
-            while (i < 50) {
-                let snapPop = res.body.pop()
-                newRes.unshift(snapPop);
-                i++;
+            let newRes;
+            if(res.body.length > 50){
+                newRes = res.body.slice(0, 50);
+            }else{
+                newRes = res.body;
             }
-            this.setState({snaps: newRes});
+            this.setState({snaps: newRes, loadingText: 'Add Snaps Yo!'});
         });
     },
 
     handleSnapChange(e) {
         this.setState({newSnap: e.target.value});
     },
+
     addSnap(e){
         e.preventDefault();
         let newSnap = {snap: filter.clean(this.state.newSnap)}
