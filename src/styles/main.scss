@@ -40,25 +40,32 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .heading {
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px 10px 0;
+    padding: 0;
     font-weight: 600;
     font-size: 30px;
-    position: absolute;
     bottom: 0;
+    left: 0;
+    width: 70%;
+    line-height: 30px;
+    position: absolute;
     color: #556773;
 }
 
 .btn-back{
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px 10px 0;
-    font-size: 25px;
+    font-size: 12px;
     color: #556773;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    margin: 0;
+    padding: 5px;
+    cursor: pointer;
+    transition: all .3s;
     font-family: 'Bungee Hairline', sans-serif;
     &:hover{
-        color: lighten (#556773, 10%);
+        background: #164453;
+        color: #d0dcce;
     }
 }
 
@@ -117,10 +124,11 @@ form.add-snap {
         padding: 10px;
         width: 75%;
         color: #d0dcce;
-              &:focus{
-        box-shadow: none;
-        outline: 0;
-        border: 0;
+        cursor: pointer;
+        &:focus{
+            box-shadow: none;
+            outline: 0;
+            border: 0;
       }
 
         &.btn-submit{
@@ -165,12 +173,23 @@ form.add-snap {
 .snap-value,
 .edit-snap {
     width: 80%;
-      font-size: 20px;
-      padding: 6px;
-      border: none;
-      line-height: 25px;
+    font-size: 20px;
+    padding: 6px;
+    border: none;
+    line-height: 25px;
     color: #55676F;
     align-items: center;
+}
+
+.list-item{
+    .snap-value,
+    .edit-snap {
+        cursor: pointer;
+
+    }
+    .snap-value:hover{
+        color: #164453;
+    }
 }
 
 
@@ -250,7 +269,7 @@ form.add-snap {
     color: #556773;
     font-family: Consolas, Menlo, Monaco, monospace;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 30px;
     opacity: 0.8;
     width: 100%;
     text-align: center;

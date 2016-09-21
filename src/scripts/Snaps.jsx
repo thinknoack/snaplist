@@ -65,7 +65,7 @@ let Snaps = React.createClass({
             let snap = snaps.snap;
             let snap_id = snaps._id;
             return (
-                <li className="animated bounceInDown" key={snap_id}>
+                <li className="animated bounceInDown snap-item" key={snap_id}>
                     <ClickToEdit
                         label='label'
                         onChange={this.editSnap.bind(this, snap_id)}

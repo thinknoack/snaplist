@@ -63,7 +63,7 @@ let Lists = React.createClass({
             let list_id = lists._id;
             let listName = lists.snapListName;
             return (
-                <li className="animated bounceInDown" key={list_id}>
+                <li className="animated bounceInDown list-item" key={list_id}>
                     <ClickToEdit
                         label='label'
                         onChange={this.editList.bind(this, list_id)}

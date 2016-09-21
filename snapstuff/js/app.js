@@ -27567,7 +27567,7 @@ var Lists = _react2.default.createClass({
             var listName = lists.snapListName;
             return _react2.default.createElement(
                 'li',
-                { className: 'animated bounceInDown', key: list_id },
+                { className: 'animated bounceInDown list-item', key: list_id },
                 _react2.default.createElement(_clickToEdit2.default, {
                     label: 'label',
                     onChange: _this.editList.bind(_this, list_id),
@@ -27758,7 +27758,7 @@ var Snaps = _react2.default.createClass({
             var snap_id = snaps._id;
             return _react2.default.createElement(
                 'li',
-                { className: 'animated bounceInDown', key: snap_id },
+                { className: 'animated bounceInDown snap-item', key: snap_id },
                 _react2.default.createElement(_clickToEdit2.default, {
                     label: 'label',
                     onChange: _this.editSnap.bind(_this, snap_id),
