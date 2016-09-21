@@ -21,6 +21,9 @@ __Deploy on Github pages with one command:__
 `npm run deploy`
 
 
+`gulp build && gulp deploy`
+
+
 ## Fork of
 
 [Granze React Starterify](https://github.com/Granze/react-starterify/releases/latest)

@@ -31,7 +31,7 @@ const paths = {
   srcCss: 'src/styles/**/*.scss',
   srcCssUtil: 'src/styles/util/*.css',
   srcImg: 'src/images/**',
-  srcLint: ['src/**/*.js', 'test/**/*.js'],
+  srcLint: ['src/**/**/*.js', 'test/**/**/*.js'],
   dist: 'snapstuff/',
   distCSS: 'snapstuff/styles',
   distUtil: 'snapstuff/styles/util',
@@ -137,6 +137,7 @@ gulp.task('lint', () => {
 gulp.task('watchTask', () => {
   gulp.watch(paths.srcCss, ['styles']);
   gulp.watch(paths.srcLint, ['lint']);
+  gulp.watch('src/scripts/*.js', ['lint']);
 });
 
 gulp.task('deploy', () => {

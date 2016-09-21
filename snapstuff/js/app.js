@@ -27396,17 +27396,27 @@ var _App = require('./scripts/App.jsx');
 
 var _App2 = _interopRequireDefault(_App);
 
+var _Lists = require('./scripts/Lists.jsx');
+
+var _Lists2 = _interopRequireDefault(_Lists);
+
+var _Snaps = require('./scripts/Snaps.jsx');
+
+var _Snaps2 = _interopRequireDefault(_Snaps);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.React = _react2.default;
 
 (0, _reactDom.render)(_react2.default.createElement(
-    _reactRouter.Router,
-    { history: _reactRouter.hashHistory },
-    _react2.default.createElement(_reactRouter.Route, { path: '/', component: _App2.default })
+				_reactRouter.Router,
+				{ history: _reactRouter.hashHistory },
+				_react2.default.createElement(_reactRouter.Route, { path: '/', component: _App2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: 'lists', component: _Lists2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: 'lists/:id', component: _Snaps2.default })
 ), document.getElementById('content'));
 
-},{"./scripts/App.jsx":246,"react":237,"react-dom":32,"react-router":62}],246:[function(require,module,exports){
+},{"./scripts/App.jsx":246,"./scripts/Lists.jsx":247,"./scripts/Snaps.jsx":248,"react":237,"react-dom":32,"react-router":62}],246:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27421,6 +27431,49 @@ var _reactRouter = require('react-router');
 
 var _package = require('../../package.json');
 
+var _api = require('../scripts/utils/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var App = _react2.default.createClass({
+    displayName: 'App',
+    render: function render() {
+
+        return _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+                _reactRouter.Link,
+                { to: '/lists' },
+                'Lists'
+            )
+        );
+    }
+});
+
+exports.default = App;
+
+},{"../../package.json":244,"../scripts/utils/api":250,"react":237,"react-router":62}],247:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _package = require('../../package.json');
+
+var _clickToEdit = require('./click-to-edit.jsx');
+
+var _clickToEdit2 = _interopRequireDefault(_clickToEdit);
+
 var _badWords = require('bad-words');
 
 var _badWords2 = _interopRequireDefault(_badWords);
@@ -27433,14 +27486,199 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var filter = new _badWords2.default();
 
-var App = _react2.default.createClass({
-    displayName: 'App',
+var Lists = _react2.default.createClass({
+    displayName: 'Lists',
+    getInitialState: function getInitialState() {
+        return {
+            contacts: [],
+            lists: [],
+            loadingText: 'Loading Snaps',
+            newList: ''
+        };
+    },
+    componentWillMount: function componentWillMount() {
+        this.getLists();
+    },
+    render: function render() {
+
+        var loadingGif = _react2.default.createElement(
+            'div',
+            { className: 'loader' },
+            _react2.default.createElement(
+                'span',
+                null,
+                '{'
+            ),
+            ' ',
+            this.state.loadingText,
+            ' ',
+            _react2.default.createElement(
+                'span',
+                null,
+                '}'
+            )
+        );
+
+        var snapLists = _react2.default.createElement(
+            'ul',
+            { className: 'snaps-list' },
+            this._listSnaps(this.state.lists)
+        );
+
+        return _react2.default.createElement(
+            'div',
+            { className: 'snap-wrap' },
+            _react2.default.createElement(
+                'div',
+                { className: 'container' },
+                _react2.default.createElement(
+                    'form',
+                    { onSubmit: this.addList, className: 'add-snap' },
+                    _react2.default.createElement('input', {
+                        type: 'text',
+                        placeholder: 'create a list',
+                        value: this.state.newList,
+                        onChange: this.handleSnapChange
+                    }),
+                    _react2.default.createElement('input', { type: 'submit', value: 'Add', className: 'btn btn-submit' })
+                ),
+                this.state.lists.length == 0 ? loadingGif : snapLists
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'frosted' },
+                _react2.default.createElement(
+                    'h1',
+                    { className: 'heading' },
+                    'Snaplist'
+                )
+            )
+        );
+    },
+
+
+    // template methods ---------------------------------------------------
+
+    _listSnaps: function _listSnaps(lists) {
+        var _this = this;
+
+        var snapsList = lists.map(function (lists) {
+            var list_id = lists._id;
+            var listName = lists.snapListName;
+            return _react2.default.createElement(
+                'li',
+                { className: 'animated bounceInDown', key: list_id },
+                _react2.default.createElement(_clickToEdit2.default, {
+                    label: 'label',
+                    onChange: _this.editList.bind(_this, list_id),
+                    deleteThis: _this.deleteList.bind(_this, list_id),
+                    linkThis: _this.linkThis.bind(_this, list_id),
+                    type: 'string',
+                    value: listName
+                })
+            );
+        });
+        snapsList.reverse();
+        return snapsList;
+    },
+    getLists: function getLists() {
+        var _this2 = this;
+
+        _api2.default.getLists(function (err, res) {
+            var newRes = res.body;
+            _this2.setState({ lists: newRes, loadingText: 'Add Lists Yo!' });
+        });
+    },
+    handleSnapChange: function handleSnapChange(e) {
+        this.setState({ newList: e.target.value });
+    },
+    addList: function addList(e) {
+        var _this3 = this;
+
+        e.preventDefault();
+        var newList = void 0;
+        if (this.state.newList == '') {
+            newList = { snapListName: 'new list' };
+        } else {
+            newList = { snapListName: filter.clean(this.state.newList) };
+        }
+        _api2.default.addList(newList, function (err, res) {
+            if (res.status == 400) {
+                console.log("400");
+            } else {
+                _this3.getLists();
+                _this3.setState({ newList: '' });
+            }
+        });
+    },
+    editList: function editList(list_id, e) {
+        var _this4 = this;
+
+        //e.preventDefault();
+        var snapListName = { snapListName: filter.clean(e) };
+        _api2.default.editList(snapListName, list_id, function (err, res) {
+            _this4.getLists();
+        });
+    },
+    deleteList: function deleteList(list_id, e) {
+        var self = this;
+        e.preventDefault();
+        var newListState = [];
+        newListState = this.state.lists.filter(function (obj) {
+            return obj._id !== list_id;
+        });
+        self.setState({ lists: newListState });
+        _api2.default.deleteList(list_id, function (err, res) {});
+    },
+    linkThis: function linkThis(list_id, e) {
+        var self = this;
+        e.preventDefault();
+        _reactRouter.hashHistory.push('/lists/' + list_id);
+    }
+});
+
+exports.default = Lists;
+
+},{"../../package.json":244,"../scripts/utils/api":250,"./click-to-edit.jsx":249,"bad-words":2,"react":237,"react-router":62}],248:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _package = require('../../package.json');
+
+var _clickToEdit = require('./click-to-edit.jsx');
+
+var _clickToEdit2 = _interopRequireDefault(_clickToEdit);
+
+var _badWords = require('bad-words');
+
+var _badWords2 = _interopRequireDefault(_badWords);
+
+var _api = require('../scripts/utils/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var filter = new _badWords2.default();
+
+var Snaps = _react2.default.createClass({
+    displayName: 'Snaps',
     getInitialState: function getInitialState() {
         return {
             contacts: [],
             snaps: [],
             loadingText: 'Loading Snaps',
-            newSnap: ''
+            newSnap: '',
+            parent: {}
         };
     },
     componentWillMount: function componentWillMount() {
@@ -27480,15 +27718,14 @@ var App = _react2.default.createClass({
                 { className: 'container' },
                 _react2.default.createElement(
                     'form',
-                    { onSubmit: this.addSnap },
+                    { onSubmit: this.addSnap, className: 'add-snap' },
                     _react2.default.createElement('input', {
                         type: 'text',
-                        placeholder: 'Say something...',
+                        placeholder: 'create a snap',
                         value: this.state.newSnap,
-                        onChange: this.handleSnapChange,
-                        className: 'add-snap'
+                        onChange: this.handleSnapChange
                     }),
-                    _react2.default.createElement('input', { type: 'submit', value: 'Post', className: 'btn btn-submit' })
+                    _react2.default.createElement('input', { type: 'submit', value: 'Add', className: 'btn btn-submit' })
                 ),
                 this.state.snaps.length == 0 ? loadingGif : snapLists
             ),
@@ -27496,9 +27733,15 @@ var App = _react2.default.createClass({
                 'div',
                 { className: 'frosted' },
                 _react2.default.createElement(
+                    'div',
+                    { onClick: _reactRouter.hashHistory.goBack, className: 'btn-back' },
+                    'Back to all lists'
+                ),
+                _react2.default.createElement(
                     'h1',
                     { className: 'heading' },
-                    'Snaplist'
+                    'Snaplist : ',
+                    this.state.parent.snapListName
                 )
             )
         );
@@ -27515,76 +27758,241 @@ var App = _react2.default.createClass({
             var snap_id = snaps._id;
             return _react2.default.createElement(
                 'li',
-                { className: 'bounceInDown animated', key: snap_id },
-                _react2.default.createElement(
-                    'span',
-                    { className: 'snap-item' },
-                    snap
-                ),
-                _react2.default.createElement(
-                    'span',
-                    { className: 'delete-snap' },
-                    _react2.default.createElement(
-                        'span',
-                        { onClick: _this.removeSnap.bind(_this, snap_id) },
-                        'x'
-                    )
-                )
+                { className: 'animated bounceInDown', key: snap_id },
+                _react2.default.createElement(_clickToEdit2.default, {
+                    label: 'label',
+                    onChange: _this.editSnap.bind(_this, snap_id),
+                    deleteThis: _this.deleteSnap.bind(_this, snap_id),
+                    type: 'string',
+                    value: snap })
             );
-        }, this);
+        });
         snapsList.reverse();
         return snapsList;
     },
-
-
-    // request methods
-    getSnaps: function getSnaps() {
+    getParent: function getParent(parent_id) {
         var _this2 = this;
 
-        _api2.default.getSnaps(function (err, res) {
-            var i = 0;
-            var newRes = void 0;
-            if (res.body.length > 50) {
-                newRes = res.body.slice(0, 50);
-            } else {
-                newRes = res.body;
-            }
-            _this2.setState({ snaps: newRes, loadingText: 'Add Snaps Yo!' });
+        _api2.default.getParent(parent_id, function (err, res) {
+            var newParent = res.body;
+            _this2.setState({ parent: newParent });
+        });
+    },
+    getSnaps: function getSnaps() {
+        var _this3 = this;
+
+        var list_id = this.props.params.id;
+        _api2.default.getSnaps(list_id, function (err, res) {
+            var newRes = res.body;
+            _this3.setState({ snaps: newRes, loadingText: 'Add Snaps Yo!' });
+            _this3.getParent(list_id);
         });
     },
     handleSnapChange: function handleSnapChange(e) {
         this.setState({ newSnap: e.target.value });
     },
     addSnap: function addSnap(e) {
-        var _this3 = this;
+        var _this4 = this;
 
         e.preventDefault();
-        var newSnap = { snap: filter.clean(this.state.newSnap) };
+        var newSnap = void 0;
+        var parent_id = this.props.params.id;
+        if (this.state.newSnap == '') {
+            newSnap = { snap: 'new snap', parent_id: parent_id };
+        } else {
+            newSnap = { snap: filter.clean(this.state.newSnap), parent_id: parent_id };
+        }
         _api2.default.addSnap(newSnap, function (err, res) {
-            if (res.statusCode == 400) {
-                //do stuff
+            if (res.status == 400) {
+                console.log("400");
             } else {
-                    _this3.getSnaps();
-                    _this3.setState({ newSnap: '' });
-                }
+                _this4.getSnaps();
+                _this4.setState({ newSnap: '' });
+            }
         });
     },
-    removeSnap: function removeSnap(snapId, e) {
+    editSnap: function editSnap(snap_id, e) {
+        var _this5 = this;
+
+        //e.preventDefault();
+        var newSnapEdit = { snap: filter.clean(e) };
+        _api2.default.editSnap(newSnapEdit, snap_id, function (err, res) {
+            _this5.getSnaps();
+        });
+    },
+    deleteSnap: function deleteSnap(snap_id, e) {
+        var self = this;
         e.preventDefault();
-        //console.log(id);
         var newSnapState = [];
         newSnapState = this.state.snaps.filter(function (obj) {
-            return obj._id !== snapId;
+            return obj._id !== snap_id;
         });
-        this.setState({ snaps: newSnapState });
-
-        _api2.default.removeSnap(snapId, function (err, res) {});
+        self.setState({ snaps: newSnapState });
+        _api2.default.deleteSnap(snap_id, function (err, res) {});
     }
 });
 
-exports.default = App;
+exports.default = Snaps;
 
-},{"../../package.json":244,"../scripts/utils/api":247,"bad-words":2,"react":237,"react-router":62}],247:[function(require,module,exports){
+},{"../../package.json":244,"../scripts/utils/api":250,"./click-to-edit.jsx":249,"bad-words":2,"react":237,"react-router":62}],249:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ClickToEdit = _react2.default.createClass({
+    displayName: 'ClickToEdit',
+
+
+    // life cycle events --------------------------------------------------
+
+    getDefaultProps: function getDefaultProps() {
+        return {
+            editable: true,
+            type: 'string',
+            value: ''
+        };
+    },
+    getInitialState: function getInitialState() {
+        return {
+            value: this.props.value,
+            initialValue: JSON.stringify(this.props.value),
+            loading: false,
+            edit: false
+        };
+    },
+    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+        // display edit when error is triggered
+        if (nextProps.error) {
+            this.setState({ edit: true });
+        } else {
+            this.setState({ value: nextProps.value });
+        }
+    },
+
+
+    propTypes: {
+        value: _react2.default.PropTypes.any,
+        type: _react2.default.PropTypes.any,
+        label: _react2.default.PropTypes.any,
+        error: _react2.default.PropTypes.string,
+        editable: _react2.default.PropTypes.bool,
+        onDismissIssue: _react2.default.PropTypes.func,
+        onDelete: _react2.default.PropTypes.func,
+        onFileClick: _react2.default.PropTypes.func,
+        onChange: _react2.default.PropTypes.func
+    },
+
+    render: function render() {
+        var type = this.props.type;
+        var value = this.state.value;
+        var input = _react2.default.createElement(
+            'div',
+            { className: 'animated fadeIn snap-input' },
+            _react2.default.createElement('input', { className: 'edit-snap', type: 'text', value: value, onChange: this._handleChange.bind(null, type) }),
+            _react2.default.createElement(
+                'div',
+                { className: 'btn-wrapper' },
+                _react2.default.createElement(
+                    'button',
+                    { className: 'btn-save', onClick: this._save },
+                    'save'
+                )
+            )
+        );
+        var valuewrap = _react2.default.createElement(
+            'div',
+            { className: 'snap-value', onClick: this.props.linkThis },
+            value
+        );
+
+        return _react2.default.createElement(
+            'div',
+            { className: 'form-cte clearfix' },
+            this.state.edit ? input : valuewrap,
+            _react2.default.createElement(
+                'div',
+                { className: 'snap-toggle' },
+                this._editBtn()
+            )
+        );
+    },
+
+
+    // template methods ---------------------------------------------------
+
+    _editBtn: function _editBtn() {
+        var edit = this.state.edit;
+        if (this.props.editable) {
+            return _react2.default.createElement(
+                'span',
+                null,
+                _react2.default.createElement(
+                    'button',
+                    { onClick: this._toggleEdit, className: 'btn-toggle' },
+                    _react2.default.createElement(
+                        'span',
+                        null,
+                        edit ? 'Hide' : 'Edit'
+                    )
+                ),
+                _react2.default.createElement(
+                    'button',
+                    { className: 'btn-remove', onClick: this.props.deleteThis },
+                    ' remove'
+                )
+            );
+        }
+    },
+
+
+    // custom methods -----------------------------------------------------
+
+    _display: function _display() {
+        this.setState({ edit: false });
+    },
+    _toggleEdit: function _toggleEdit() {
+        this.setState({ edit: !this.state.edit });
+    },
+    _handleChange: function _handleChange(type, event) {
+        this.setState({ value: event.target.value }, function () {});
+    },
+    _handleDelete: function _handleDelete(filename, index) {
+        if (this.props.onDelete) {
+            this.props.onDelete(filename, index);
+        }
+    },
+    _save: function _save(type) {
+        var _this = this;
+
+        var self = this;
+        this.setState({ loading: true });
+        if (this.props.onChange) {
+            this.props.onChange(this.state.value, function () {
+                var initialValue = JSON.stringify(_this.state.value);
+                self.setState({ loading: false, edit: edit, initialValue: initialValue });
+            });
+        }
+        this._toggleEdit();
+    },
+    _cancel: function _cancel() {
+        var value = JSON.parse(this.state.initialValue);
+        this.setState({ edit: false, value: value });
+    }
+}); /*eslint react/no-danger: 0 */
+
+// dependencies -------------------------------------------------------
+
+exports.default = ClickToEdit;
+
+},{"react":237}],250:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27602,19 +28010,44 @@ var _config2 = _interopRequireDefault(_config);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
-    getSnaps: function getSnaps(callback) {
-        _request2.default.get(_config2.default.listsnap.url + 'snaps', {}, callback);
+
+    // Lists
+
+    getLists: function getLists(callback) {
+        _request2.default.get(_config2.default.listsnap.url + 'lists', {}, callback);
+    },
+    getParent: function getParent(parent_id, callback) {
+        _request2.default.get(_config2.default.listsnap.url + 'parent' + '/' + parent_id, {}, callback);
+    },
+    addList: function addList(listData, callback) {
+        _request2.default.post(_config2.default.listsnap.url + 'lists', { body: listData }, callback);
+    },
+    editList: function editList(listname, list_id, callback) {
+        _request2.default.put(_config2.default.listsnap.url + 'lists' + '/' + list_id, { body: listname }, callback);
+    },
+    deleteList: function deleteList(list_id, callback, options) {
+        options = options ? options : {};
+        _request2.default.del(_config2.default.listsnap.url + 'lists' + '/' + list_id + '?purge=true', options, callback);
+    },
+
+
+    // individual snaps
+    getSnaps: function getSnaps(parent_id, callback) {
+        _request2.default.get(_config2.default.listsnap.url + 'snaps' + '/' + parent_id, {}, callback);
     },
     addSnap: function addSnap(snapData, callback) {
         _request2.default.post(_config2.default.listsnap.url + 'snaps', { body: snapData }, callback);
     },
-    removeSnap: function removeSnap(snapId, callback, options) {
+    editSnap: function editSnap(snapData, snap_id, callback) {
+        _request2.default.put(_config2.default.listsnap.url + 'snaps' + '/' + snap_id, { body: snapData }, callback);
+    },
+    deleteSnap: function deleteSnap(snap_id, callback, options) {
         options = options ? options : {};
-        _request2.default.del(_config2.default.listsnap.url + 'snaps' + '/' + snapId + '?purge=true', options, callback);
+        _request2.default.del(_config2.default.listsnap.url + 'snaps' + '/' + snap_id + '?purge=true', options, callback);
     }
 };
 
-},{"../../../config":1,"./request":248}],248:[function(require,module,exports){
+},{"../../../config":1,"./request":251}],251:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

@@ -44,6 +44,22 @@ h1,h2,h3,h4,h5,h6 {
     margin: 0 auto;
     padding: 20px 10px 0;
     font-weight: 600;
+    font-size: 30px;
+    position: absolute;
+    bottom: 0;
+    color: #556773;
+}
+
+.btn-back{
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 10px 0;
+    font-size: 25px;
+    color: #556773;
+    font-family: 'Bungee Hairline', sans-serif;
+    &:hover{
+        color: lighten (#556773, 10%);
+    }
 }
 
 .logo {
@@ -64,61 +80,128 @@ h1,h2,h3,h4,h5,h6 {
     li {
         width: 100%;
         display: flex;
+        align-items: center;
         flex-direction: row;
-        flex-wrap: nowrap;
-        padding:10px 15px;
-        margin: 0 0 0;
-         background:rgba(0,0,0, .1);
+        flex-wrap: wrap;
+        flex-flow: row wrap;
+        margin: 0;
+        padding: 10px 15px;
+        background:rgba(0,0,0, .1);
         border-bottom: 2px solid rgba(0,0,0,.05);
         .snap-item{
             width:90%;
             align-self: center;
         }
+
         .delete-snap{
             width: 10%;
             text-align: right;
-            font-size: 20px;
-            font-weight: 600;
             span{
                 align-self: center;
-                padding:5px 10px;
+                padding:0;
                 color: #9e1d88;
-                transition: all 0.3s ease;
-                background: transparent;
-                &:hover{
-                    background: rgba(255,255,255,.3);
-                }
             }
         }
     }
 }
 
-form{
+form.add-snap {
     width: 100%;
     padding: 0 10px;
     margin: 10px auto;
-}
-.add-snap{
-    font-size: 20px;
-    line-height: 20px;
-    background: rgba(0,0,0,.1);
-    border: none;
-    padding: 10px;
-    width: 75%;
-    color: #d0dcce;
-}
-.btn-submit{
-    width: 25%;
-    text-align: left;
-    font-size: 20px;
-    padding: 16px;
-    border: none;
-    line-height: 20px;
-    background: transparent;
-    color: #556773;
-    cursor: pointer;
+      input{
+        font-size: 20px;
+        line-height: 0;
+        background: rgba(0,0,0,.1);
+        border: 0;
+        padding: 10px;
+        width: 75%;
+        color: #d0dcce;
+              &:focus{
+        box-shadow: none;
+        outline: 0;
+        border: 0;
+      }
 
+        &.btn-submit{
+          width: 25%;
+          text-align: left;
+          font-size: 20px;
+          padding: 16px;
+          border: none;
+          line-height: 0;
+          background: transparent;
+          color: #556773;
+          cursor: pointer;
+                &:focus{
+            box-shadow: none;
+            outline: 0;
+            border: 0;
+          }
+        }
+       }
+    }
+
+.form-cte {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
 }
+
+
+.snap-input {
+    flex-basis: 80%
+}
+.snap-toggle{
+}
+
+.snap-input {
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+}
+
+.snap-value,
+.edit-snap {
+    width: 80%;
+      font-size: 20px;
+      padding: 6px;
+      border: none;
+      line-height: 25px;
+    color: #55676F;
+    align-items: center;
+}
+
+
+.edit-snap{
+  width: 70%;
+  background: rgba(0,0,0,.1);
+  color: #d0dcce;
+  &:focus{
+    box-shadow: none;
+    outline: 0;
+    border: 0;
+  }
+}
+
+
+.btn-save,
+.btn-remove,
+.btn-toggle{
+  font-size: 15px;
+      border: none;
+      line-height: 0;
+      background: transparent;
+      color: #556773;
+      cursor: pointer;
+      &:focus{
+        box-shadow: none;
+        outline: 0;
+        border: 0;
+      }
+}
+
 
 /* blur the same background as the body */
 .frosted::before {
